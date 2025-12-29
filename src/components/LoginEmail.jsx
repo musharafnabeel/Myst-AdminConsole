@@ -1,14 +1,15 @@
 import logo from "../assets/logo.png";
 
 import { useState } from "react";
-import { isValidUser } from "../auth";
+import {checkAccount} from "../services/auth.service";
 import "./Login.css";
 
 export default function LoginEmail({ onNext }) {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     setError("");
 
@@ -17,12 +18,20 @@ export default function LoginEmail({ onNext }) {
       return;
     }
 
-    if (!isValidUser(email)) {
-      setError("No user found with that email");
-      return;
-    }
+    setLoading(true);
+    try {
+      const exists = await checkAccount(email);
+      if (!exists) {
+        setError("No user found with that email");
+        return;
+      }
 
-    onNext(email);
+      onNext(email);
+    } catch (err) {
+      setError("Unable to verify account. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (

@@ -1,7 +1,7 @@
-import { encryptData } from "../lib/encrypt";
+import { encryptData } from "../lib/encryptData";
 
 const BASE_URL =
-  "https://beanstalk.myskillstree.com";
+  "https://beanstalk.myskillstree.com/skill/api/v1";
 
 export async function checkAccount(id) {
   const encryptedId = encryptData(id);

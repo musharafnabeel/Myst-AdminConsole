@@ -1,56 +1,22 @@
-// import { useState } from 'react'
-// import './App.css'
-// import LoginEmail from './components/LoginEmail'
-// import LoginPassword from './components/LoginPassword'
-
-// function App() {
-//   const [stage, setStage] = useState('email') // 'email' | 'password' | 'success'
-//   const [email, setEmail] = useState('')
-
-//   function handleEmailNext(e) {
-//     setEmail(e)
-//     setStage('password')
-//   }
-
-//   function handleBack() {
-//     setStage('email')
-//   }
-
-//   function handleSuccess() {
-//     setStage('success')
-//   }
-
-//   return (
-//     <div>
-//       {stage === 'email' && <LoginEmail onNext={handleEmailNext} />}
-//       {stage === 'password' && (
-//         <LoginPassword email={email} onBack={handleBack} onSuccess={handleSuccess} />
-//       )}
-
-//       {stage === 'success' && (
-//         <div style={{ textAlign: 'center', padding: '3rem' }}>
-//           <h2>✅ Signed in</h2>
-//           <p>Welcome, <strong>{email}</strong> — you are now signed in.</p>
-//           <button onClick={() => { setStage('email'); setEmail('') }}>Sign out</button>
-//         </div>
-//       )}
-//     </div>
-//   )
-// }
-
-// export default App
-
-
 import { useState } from "react";
+import { BrowserRouter, Routes, Route, Navigate, useNavigate } from "react-router-dom";
+
 import LoginEmail from "./components/LoginEmail";
 import LoginPassword from "./components/LoginPassword";
 import "./components/Login.css";
 import loginImg from "./assets/login-image.jpg";
-// import router from "./routes";
 
-function App() {
+import Dashboard from "./pages/Dashboard";
+import Users from "./pages/Users";
+import ProtectedRoute from "./routes/ProtectedRoute";
+import DashboardLayout from "./layouts/DashboardLayout";
+
+/* ================= LOGIN PAGE ================= */
+
+function LoginPage() {
   const [stage, setStage] = useState("email");
   const [email, setEmail] = useState("");
+  const navigate = useNavigate();
 
   return (
     <div className="login-page">
@@ -62,24 +28,58 @@ function App() {
 
       {/* RIGHT CONTENT */}
       <div className="login-right">
-        {stage === "email" && <LoginEmail onNext={(e) => { setEmail(e); setStage("password"); }} />}
+        {stage === "email" && (
+          <LoginEmail
+            onNext={(e) => {
+              setEmail(e);
+              setStage("password");
+            }}
+          />
+        )}
 
         {stage === "password" && (
           <LoginPassword
             email={email}
             onBack={() => setStage("email")}
-            onSuccess={() => setStage("success")}
-          />
-        )}
+            onSuccess={() => {
+              // ✅ save token or flag
+              localStorage.setItem("token", "logged-in");
 
-        {stage === "success" && (
-          <div className="login-card" style={{ textAlign: "center" }}>
-            <h2>✅ Signed in</h2>
-            <p>Welcome, <strong>{email}</strong></p>
-          </div>
+              // ✅ redirect to dashboard
+              navigate("/dashboard");
+            }}
+          />
         )}
       </div>
     </div>
+  );
+}
+
+/* ================= APP ROOT ================= */
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        {/* Login */}
+        <Route path="/login" element={<LoginPage />} />
+
+        {/* Protected Dashboard */}
+        <Route
+          element={
+            <ProtectedRoute>
+              <DashboardLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/users" element={<Users />} />
+        </Route>
+
+        {/* Default redirect */}
+        <Route path="*" element={<Navigate to="/login" replace />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

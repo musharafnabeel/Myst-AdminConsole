@@ -1,0 +1,91 @@
+/* ===============================
+   Sidebar Layout
+================================ */
+.sidebar {
+  width: 240px;
+  height: 100vh;
+  background: #0f172a; /* Dark blue */
+  color: #e5e7eb;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 16px;
+  box-sizing: border-box;
+}
+
+/* ===============================
+   Logo / Brand
+================================ */
+.sidebar .logo {
+  font-size: 20px;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 28px;
+  text-align: center;
+}
+
+/* ===============================
+   Navigation
+================================ */
+.sidebar nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sidebar nav a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  color: #cbd5f5;
+  text-decoration: none;
+  font-size: 14px;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+/* Hover */
+.sidebar nav a:hover {
+  background: #1e293b;
+  color: #ffffff;
+}
+
+/* Active Route */
+.sidebar nav a.active {
+  background: #2563eb;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* ===============================
+   Footer / Logout (optional)
+================================ */
+.sidebar-footer {
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-footer button {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  background: #1e293b;
+  color: #e5e7eb;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.sidebar-footer button:hover {
+  background: #334155;
+}
+
+/* ===============================
+   Responsive (Optional)
+================================ */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 200px;
+  }
+}
